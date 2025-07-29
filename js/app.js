@@ -62,6 +62,14 @@ function main(){
         findItemInList(list, uuid);
     });
 
+    bodyRef.on("click", "[data-js-delete-list-item]", function(){
+        let uuid = $(this).data("js-delete-list-item");
+        let idxToDelete = list.listItems.findIndex((el)=>{return el.uuid === uuid});
+        list.listItems.splice(idxToDelete, 1);
+        $(this).closest(`[data-js-list-item]`).remove();
+
+    });
+
 
 
     // turn back on to enable dynamic rendering once templating is done
