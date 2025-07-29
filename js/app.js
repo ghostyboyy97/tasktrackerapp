@@ -1,16 +1,17 @@
 let activeList = false;
 let allLists = [];
+const LIST_STORAGE_KEY = "__tasktrackerapp_lists__";
 let bodyRef;
 
 let list = {
     uuid: 0,
-    title: "",
+    title: "Untitled list",
     listItems: [],
 }
 
 let listItem = {
     uuid: 0,
-    title: "Untitled list",
+    title: "",
     desc: "",
     itemStatus: "to_do",
 }
@@ -21,10 +22,16 @@ function main(){
 
 
     bodyRef = $("body");
+    
+    bodyRef.on("click", "[data-js-readme]", function(){
+        location.href = "./README.md";
+    });
 
     bodyRef.on("click", "[data-js-return]", function(){
-        // TODO - save list
+        saveList(list);
+        activeList = false;
         showAllLists();
+        makeAllLists();
     });
 
     bodyRef.on("click", "[data-js-add-list]", function(){
@@ -32,7 +39,7 @@ function main(){
         console.log(uuid);
         activeList = uuid;
         list.uuid = uuid;
-        showList(activeList);
+        showList(list);
     });
 
     bodyRef.on("click", "[data-js-add-list-item]", function(){
@@ -48,6 +55,14 @@ function main(){
 
     });
 
+    bodyRef.on("click", ".list_entry__button", function(){
+        let uuid = parseInt($(this).data("js-list-id"));
+        activeList = uuid;
+        let listToShow = allLists.findIndex((el)=>{return el.uuid === uuid});
+        list = allLists[listToShow];
+        showList(list);
+    });
+
     bodyRef.on("change", "#listTitle", function(){
         console.log($(this).val())
         list.title = $(this).val();
@@ -59,7 +74,8 @@ function main(){
         console.log(uuid)
         let listItem = findItemInList(list, uuid);
         listItem[listAttr] = $(this).val();
-        findItemInList(list, uuid);
+        console.log(listItem)
+        saveList(list);
     });
 
     bodyRef.on("click", "[data-js-delete-list-item]", function(){
@@ -73,14 +89,38 @@ function main(){
 
 
     // turn back on to enable dynamic rendering once templating is done
+    loadLists();
     // activeList ? showList(activeList) : showAllLists();
 
     
 }
 
 
-function showList(activeList){
+function showList(list){
     emptyListCtr();
+
+    $("main").append($(`<section class="list_ctr">
+        <button class="list_ctr__back" data-js-return="">Back to list view</button>
+        <input type="text" id="listTitle" placeholder="Add a list title" value="${list.title}">
+        <div class="list_ctr__items">
+            
+        </div>
+        <button data-js-add-list-item="">Add a new item to the list</button>
+    </section>`));
+    if (list.listItems.length > 0){
+
+        list.listItems.forEach((item)=>{
+            makeListItemUI(item);
+        });
+    }
+}
+
+function makeListRow(list){
+    return $(`<div class="list_entry">
+        <div class="list_entry__icon">></div>
+        <div class="list_entry__title">${list.title}</div>
+        <button class="list_entry__button" data-js-list-id=${list.uuid}>View list -></button>
+    </div>`);
 }
 
 function showAllLists(){
@@ -88,21 +128,6 @@ function showAllLists(){
     $("main").append(`
             <h2>Select a list below, or create a new one to get started!</h2>
             <section class="all_lists__ctr">
-                <div class="list_entry">
-                    <div class="list_entry__icon">></div>
-                    <div class="list_entry__title">Placeholder list 1</div>
-                    <button class="list_entry__button">View list -></button>
-                </div>
-                <div class="list_entry">
-                    <div class="list_entry__icon">></div>
-                    <div class="list_entry__title">Placeholder list 2</div>
-                    <button class="list_entry__button">View list -></button>
-                </div>
-                <div class="list_entry">
-                    <div class="list_entry__icon">></div>
-                    <div class="list_entry__title">Placeholder list 3</div>
-                    <button class="list_entry__button">View list -></button>
-                </div>
                 <button class="list_entry add_list" data-js-add-list="">Make a new list</button>
             </section>
     `)
@@ -121,11 +146,11 @@ function makeListItemUI(item){
                 <option value="on_hold">On hold</option>
                 <option value="completed">Completed!</option>
             </select>
-            <input type="text" data-js-change-prop="title" id="itemTitle${item.uuid}" placeholder="new list item">
+            <input type="text" data-js-change-prop="title" id="itemTitle${item.uuid}" placeholder="new list item" value="${item.title}">
             <button data-js-delete-list-item="${item.uuid}">delete item</button>
-            <textarea data-js-change-prop="desc" placeholder="description"></textarea>
+            <textarea data-js-change-prop="desc" placeholder="description">${item.desc}</textarea>
         </div>
-    `)
+    `);
     newItemUI.find(`option[value=${item.status}`).attr("selected", "true");
     $(".list_ctr__items").append(newItemUI);
 }
@@ -134,4 +159,42 @@ function findItemInList(list, id){
     let targetItem = list.listItems.find((el)=>{return el.uuid === id});
     console.log(targetItem)
     return targetItem;
+}
+
+
+
+
+
+function saveList(list){
+    let listID = list.uuid;
+    let listIdx = allLists.findIndex((el)=>{return el.uuid === listID});
+    if (listIdx >= 0){ // -1 = no list exists
+        allLists.splice(listIdx, 1, list); // replace it at that idx
+    } else { // doesn't exist, new list saved
+        allLists.push(list);
+    }
+    localStorage.setItem(LIST_STORAGE_KEY, JSON.stringify(allLists));
+}
+
+function loadLists(){
+    let listsFromStorage = localStorage.getItem(LIST_STORAGE_KEY);
+    console.log(listsFromStorage === null);
+    showAllLists();
+    if (listsFromStorage !== null){
+        listsFromStorage = JSON.parse(listsFromStorage);
+        allLists = listsFromStorage;
+        makeAllLists();
+    }
+
+
+
+}
+
+function makeAllLists(){
+    if (allLists.length > 0){
+        allLists.forEach((list)=>{
+            let newRow = makeListRow(list);
+            $(".add_list").before(newRow);
+        });
+    }
 }
