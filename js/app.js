@@ -1,7 +1,9 @@
-let activeList = false;
+let activeList = 0;
 let allLists = [];
 const LIST_STORAGE_KEY = "__tasktrackerapp_lists__";
+const LIST_ACTIVE_STORAGE_KEY = "__tasktrackerapp_list_key__"
 let bodyRef;
+let animTimeout;
 
 let list = {
     uuid: 0,
@@ -18,8 +20,10 @@ let listItem = {
 
 function main(){
 
-    console.log("main working");
-
+    $(window).on("resize", function(){
+        resizeExtra();
+    });
+    resizeExtra();
 
     bodyRef = $("body");
     
@@ -52,10 +56,10 @@ function main(){
         }
         list.listItems.push(newListItem);
         makeListItemUI(newListItem);
-
     });
 
-    bodyRef.on("click", ".list_entry__button", function(){
+    bodyRef.on("click", ".list_entry", function(){
+        if ($(this).hasClass("add_list")){ return; }
         let uuid = parseInt($(this).data("js-list-id"));
         activeList = uuid;
         let listToShow = allLists.findIndex((el)=>{return el.uuid === uuid});
@@ -83,14 +87,12 @@ function main(){
         let idxToDelete = list.listItems.findIndex((el)=>{return el.uuid === uuid});
         list.listItems.splice(idxToDelete, 1);
         $(this).closest(`[data-js-list-item]`).remove();
-
+        saveList(list);
     });
 
 
 
-    // turn back on to enable dynamic rendering once templating is done
     loadLists();
-    // activeList ? showList(activeList) : showAllLists();
 
     
 }
@@ -100,12 +102,10 @@ function showList(list){
     emptyListCtr();
 
     $("main").append($(`<section class="list_ctr">
-        <button class="list_ctr__back" data-js-return="">Back to list view</button>
+        <button class="list_ctr__back nav_button" data-js-return="">Back to list view</button>
         <input type="text" id="listTitle" placeholder="Add a list title" value="${list.title}">
-        <div class="list_ctr__items">
-            
-        </div>
-        <button data-js-add-list-item="">Add a new item to the list</button>
+        <div class="list_ctr__items"></div>
+        <button class="nav_button" title="Add item to the task list" data-js-add-list-item=""><img src="./img/plus.svg"></button>
     </section>`));
     if (list.listItems.length > 0){
 
@@ -113,13 +113,18 @@ function showList(list){
             makeListItemUI(item);
         });
     }
+
+    console.log("set active list to UUID")
+    localStorage.setItem(LIST_ACTIVE_STORAGE_KEY, JSON.stringify(list.uuid));
+
+    setRendered();
 }
 
 function makeListRow(list){
-    return $(`<div class="list_entry">
-        <div class="list_entry__icon">></div>
+    return $(`<div class="list_entry" data-js-list-id=${list.uuid}>
+        <div class="list_entry__icon"><img src="./img/carat.svg"></div>
         <div class="list_entry__title">${list.title}</div>
-        <button class="list_entry__button" data-js-list-id=${list.uuid}>View list -></button>
+        <button class="list_entry__button">View list<img src="./img/arrow.svg"></button>
     </div>`);
 }
 
@@ -128,13 +133,13 @@ function showAllLists(){
     $("main").append(`
             <h2>Select a list below, or create a new one to get started!</h2>
             <section class="all_lists__ctr">
-                <button class="list_entry add_list" data-js-add-list="">Make a new list</button>
+                <button class="list_entry add_list nav_button" data-js-add-list="">Make a new list</button>
             </section>
     `)
 }
 
 function emptyListCtr(){
-    $("main").empty();
+    $("main").empty().removeClass("rendered");
 }
 
 function makeListItemUI(item){
@@ -147,8 +152,8 @@ function makeListItemUI(item){
                 <option value="completed">Completed!</option>
             </select>
             <input type="text" data-js-change-prop="title" id="itemTitle${item.uuid}" placeholder="new list item" value="${item.title}">
-            <button data-js-delete-list-item="${item.uuid}">delete item</button>
-            <textarea data-js-change-prop="desc" placeholder="description">${item.desc}</textarea>
+            <button data-js-delete-list-item="${item.uuid}" title="Delete this entry"><img src="./img/trash.svg"></button>
+            <textarea data-js-change-prop="desc" placeholder="description" rows="3">${item.desc}</textarea>
         </div>
     `);
     newItemUI.find(`option[value=${item.status}`).attr("selected", "true");
@@ -179,12 +184,32 @@ function saveList(list){
 function loadLists(){
     let listsFromStorage = localStorage.getItem(LIST_STORAGE_KEY);
     console.log(listsFromStorage === null);
-    showAllLists();
     if (listsFromStorage !== null){
         listsFromStorage = JSON.parse(listsFromStorage);
         allLists = listsFromStorage;
-        makeAllLists();
+
+        let activeListKey = localStorage.getItem(LIST_ACTIVE_STORAGE_KEY);
+        console.log(activeListKey)
+        if (activeListKey !== null){
+            activeListKey = parseInt(activeListKey);
+            if (activeListKey != 0){
+                let targetList = allLists.find((el)=>{return el.uuid === activeListKey});
+                if (targetList){
+                    showList(targetList);
+                } else {
+                    showAllLists();
+                    makeAllLists();
+                }
+            } else {
+                showAllLists();
+                makeAllLists();
+            }
+        } else {
+            showAllLists();
+            makeAllLists();
+        }
     }
+    // else, no lists to make, just show default UI
 
 
 
@@ -197,4 +222,24 @@ function makeAllLists(){
             $(".add_list").before(newRow);
         });
     }
+    console.log("set active list to 0")
+    localStorage.setItem(LIST_ACTIVE_STORAGE_KEY, JSON.stringify(0));
+    setRendered();
+}
+
+function setRendered(){
+    clearTimeout(animTimeout);
+    animTimeout = setTimeout(() => {
+        $("main").addClass("rendered");
+    }, 100);
+}
+
+
+let font = 100;
+function resizeExtra(){
+    let ws = window.innerWidth/1920;
+    let hs = window.innerHeight/1080;
+    let ratio = ws < hs ? ws : hs;
+    font = 100 * ratio;
+    $("html").css("font-size", `${font}px`);
 }

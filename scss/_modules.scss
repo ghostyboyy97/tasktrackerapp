@@ -1,0 +1,22 @@
+@mixin square($dimension: 100%, $radius: 0){
+    width: $dimension;
+    height: $dimension;
+    @if ($radius != 0){
+        border-radius: $radius;
+    }
+}
+
+@mixin rect($w, $h, $r: 0){
+    width: $w;
+    height: $h;
+    @if ($r != 0){
+        border-radius: $r;
+    }
+}
+
+@mixin flex($direction: row, $justify: flex-start, $align: flex-start){
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
