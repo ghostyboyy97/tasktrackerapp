@@ -20,5 +20,27 @@ main .list_ctr {
   display: flex;
   flex-direction: column;
 }
+main .list_ctr .list_ctr__items {
+  display: flex;
+  flex-direction: column;
+}
+main .list_ctr .list_ctr__items .list_ctr__item {
+  margin: 10px 0;
+  display: grid;
+  grid-template-areas: "status title delete" "empty desc desc";
+  grid-template-columns: 100px 1fr 50px;
+}
+main .list_ctr .list_ctr__items .list_ctr__item select {
+  grid-area: status;
+}
+main .list_ctr .list_ctr__items .list_ctr__item input {
+  grid-area: title;
+}
+main .list_ctr .list_ctr__items .list_ctr__item button {
+  grid-area: delete;
+}
+main .list_ctr .list_ctr__items .list_ctr__item textarea {
+  grid-area: desc;
+}
 
 /*# sourceMappingURL=custom.css.map */

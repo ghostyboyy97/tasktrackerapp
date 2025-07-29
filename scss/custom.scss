@@ -21,5 +21,29 @@ main{
         width: 50dvw;
         display: flex;
         flex-direction: column;
+        .list_ctr__items{
+            display: flex;
+            flex-direction: column;
+            .list_ctr__item{
+                margin: 10px 0;
+                display: grid;
+                grid-template-areas: 
+                    "status title delete"
+                    "empty desc desc";
+                grid-template-columns: 100px 1fr 50px;
+                select{
+                    grid-area: status;
+                }
+                input{
+                    grid-area: title;
+                }
+                button{
+                    grid-area: delete;
+                }
+                textarea{
+                    grid-area: desc;
+                }
+            }
+        }
     }
 }
