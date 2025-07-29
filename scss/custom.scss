@@ -3,7 +3,7 @@ header{
 }
 
 main{
-    .list_ctr{
+    .all_lists__ctr{
         display: flex;
         flex-direction: column;
         .list_entry{
@@ -15,5 +15,11 @@ main{
                 width: 400px;
             }
         }
+    }
+
+    .list_ctr{
+        width: 50dvw;
+        display: flex;
+        flex-direction: column;
     }
 }

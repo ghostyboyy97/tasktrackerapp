@@ -2,18 +2,23 @@ header {
   display: flex;
 }
 
-main .list_ctr {
+main .all_lists__ctr {
   display: flex;
   flex-direction: column;
 }
-main .list_ctr .list_entry {
+main .all_lists__ctr .list_entry {
   height: 2em;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-main .list_ctr .list_entry.add_list {
+main .all_lists__ctr .list_entry.add_list {
   width: 400px;
+}
+main .list_ctr {
+  width: 50dvw;
+  display: flex;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=custom.css.map */

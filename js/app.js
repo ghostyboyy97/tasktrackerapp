@@ -1,5 +1,6 @@
 let activeList = false;
 let allLists = [];
+let bodyRef;
 
 let list = {
     uuid: 0,
@@ -18,21 +19,44 @@ function main(){
 
     console.log("main working");
 
-    activeList ? showList(activeList) : showAllLists();
+
+    bodyRef = $("body");
+
+    bodyRef.on("click", "[data-js-return]", function(){
+        // TODO - save list
+        showAllLists();
+    });
+
+    bodyRef.on("click", "[data-js-add-list]", function(){
+        let uuid = Date.now();
+        console.log(uuid);
+        activeList = uuid;
+        list.uuid = uuid;
+        showList(activeList);
+    });
+
+    bodyRef.on("keyup", "#listTitle", function(){
+        console.log($(this).val())
+        list.title = $(this).val()
+    });
 
 
+    // turn back on to enable dynamic rendering once templating is done
+    // activeList ? showList(activeList) : showAllLists();
+
+    
 }
 
 
 function showList(activeList){
-
+    emptyListCtr();
 }
 
 function showAllLists(){
     emptyListCtr();
     $("main").append(`
             <h2>Select a list below, or create a new one to get started!</h2>
-            <div class="list_ctr">
+            <section class="all_lists__ctr">
                 <div class="list_entry">
                     <div class="list_entry__icon">></div>
                     <div class="list_entry__title">Placeholder list 1</div>
@@ -49,7 +73,7 @@ function showAllLists(){
                     <button class="list_entry__button">View list -></button>
                 </div>
                 <button class="list_entry add_list" data-js-add-list="">Make a new list</button>
-            </div>
+            </section>
     `)
 }
 

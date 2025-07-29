@@ -11,7 +11,21 @@
             <button>?</button>
         </header>
         <main>
-            
+            <section class="list_ctr">
+                <button class="list_ctr__back" data-js-return="">Back to list view</button>
+                <input type="text" id="listTitle" placeholder="Add a list title">
+                <div class="list_ctr__items">
+                    <div class="list_ctr__item" data-js-list-item-id="1000">
+                        <select name="itemStatus" id="itemStatus1000">
+                            <option value="to_do" selected>To do</option>
+                            <option value="in_progress">In progress</option>
+                            <option value="on_hold">On hold</option>
+                            <option value="completed">Completed!</option>
+                        </select>
+                        <input type="text" id="itemTitle1000">
+                    </div>
+                </div>
+            </section>
         </main>
     </body>
 </html>
