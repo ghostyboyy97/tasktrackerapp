@@ -12,5 +12,8 @@ main .list_ctr .list_entry {
   justify-content: flex-start;
   align-items: center;
 }
+main .list_ctr .list_entry.add_list {
+  width: 400px;
+}
 
 /*# sourceMappingURL=custom.css.map */

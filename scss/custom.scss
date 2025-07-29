@@ -11,6 +11,9 @@ main{
             display: flex;
             justify-content: flex-start;
             align-items: center;
+            &.add_list{
+                width: 400px;
+            }
         }
     }
 }
