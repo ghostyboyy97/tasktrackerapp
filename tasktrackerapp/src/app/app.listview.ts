@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {List, ListItem} from './app.list';
 
 @Component({
   selector: "list-view",
@@ -7,13 +8,18 @@ import { Component } from '@angular/core';
   <section>
     <h1>Select a list below or create a new list</h1>
     <div>
-        <button>Add a list</button>
+        <div>Placeholder list entry</div>
+        <button (click)="expandList()">Add a list</button>
     </div>
   </section>
   `,
 })
 
-export class ListView {}
+export class ListView {
+    expandList() {
+        
+    }
+}
 
 // MUST HAVES
     // add a list - change to list creation view

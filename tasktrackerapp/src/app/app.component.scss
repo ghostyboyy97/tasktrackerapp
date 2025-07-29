@@ -1,8 +1,11 @@
 header{
-    display: flex;
-    background-color: green;
+    width: 100%;
+    // display: flex;
     justify-content: space-between;
     h1{
         color: white;
+    }
+    button{
+        background: none;
     }
 }

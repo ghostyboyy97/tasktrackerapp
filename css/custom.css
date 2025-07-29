@@ -1,0 +1,16 @@
+header {
+  display: flex;
+}
+
+main .list_ctr {
+  display: flex;
+  flex-direction: column;
+}
+main .list_ctr .list_entry {
+  height: 2em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/*# sourceMappingURL=custom.css.map */
