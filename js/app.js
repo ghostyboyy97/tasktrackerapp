@@ -28,7 +28,7 @@ function main(){
     bodyRef = $("body");
     
     bodyRef.on("click", "[data-js-readme]", function(){
-        location.href = "./README.md";
+        window.open("https://github.com/ghostyboyy97/tasktrackerapp", "_blank");
     });
 
     bodyRef.on("click", "[data-js-return]", function(){
@@ -40,7 +40,6 @@ function main(){
 
     bodyRef.on("click", "[data-js-add-list]", function(){
         let uuid = Date.now();
-        console.log(uuid);
         activeList = uuid;
         list.uuid = uuid;
         showList(list);
@@ -68,17 +67,14 @@ function main(){
     });
 
     bodyRef.on("change", "#listTitle", function(){
-        console.log($(this).val())
         list.title = $(this).val();
     });
 
     bodyRef.on("change", ".list_ctr__item select, .list_ctr__item input, .list_ctr__item textarea", function(){
         let uuid = parseInt($(this).closest("[data-js-list-item]").data("js-list-item"));
         let listAttr = $(this).data("js-change-prop");
-        console.log(uuid)
         let listItem = findItemInList(list, uuid);
         listItem[listAttr] = $(this).val();
-        console.log(listItem)
         saveList(list);
     });
 
@@ -114,7 +110,6 @@ function showList(list){
         });
     }
 
-    console.log("set active list to UUID")
     localStorage.setItem(LIST_ACTIVE_STORAGE_KEY, JSON.stringify(list.uuid));
 
     setRendered();
@@ -162,7 +157,6 @@ function makeListItemUI(item){
 
 function findItemInList(list, id){
     let targetItem = list.listItems.find((el)=>{return el.uuid === id});
-    console.log(targetItem)
     return targetItem;
 }
 
@@ -183,13 +177,11 @@ function saveList(list){
 
 function loadLists(){
     let listsFromStorage = localStorage.getItem(LIST_STORAGE_KEY);
-    console.log(listsFromStorage === null);
     if (listsFromStorage !== null){
         listsFromStorage = JSON.parse(listsFromStorage);
         allLists = listsFromStorage;
 
         let activeListKey = localStorage.getItem(LIST_ACTIVE_STORAGE_KEY);
-        console.log(activeListKey)
         if (activeListKey !== null){
             activeListKey = parseInt(activeListKey);
             if (activeListKey != 0){
@@ -209,8 +201,7 @@ function loadLists(){
             makeAllLists();
         }
     } else {
-        showAllLists();
-        makeAllLists();
+        showAllLists
     }
 
 
@@ -224,7 +215,6 @@ function makeAllLists(){
             $(".add_list").before(newRow);
         });
     }
-    console.log("set active list to 0")
     localStorage.setItem(LIST_ACTIVE_STORAGE_KEY, JSON.stringify(0));
     setRendered();
 }
