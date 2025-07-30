@@ -201,7 +201,8 @@ function loadLists(){
             makeAllLists();
         }
     } else {
-        showAllLists
+        showAllLists();
+        makeAllLists();
     }
 
 
