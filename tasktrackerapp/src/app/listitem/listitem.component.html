@@ -17,7 +17,7 @@
         <option value="on_hold">On hold</option>
         <option value="completed">Completed</option>
     </select>
-    <input type="text" #editedTitle [id]="item.uuid" [value]="item.title" (change)="item.title = editedTitle.value"/>
+    <input type="text" #editedTitle [id]="item.uuid" [value]="item.title" (change)="item.title = editedTitle.value; saveItems.emit();"/>
     <button (click)="remove.emit()">Delete</button>
-    <textarea placeholder="Add a description" rows="3" #editedDesc (change)="item.desc = editedDesc.value">{{item.desc}}</textarea>
+    <textarea placeholder="Add a description" rows="3" #editedDesc (change)="item.desc = editedDesc.value; saveItems.emit();">{{item.desc}}</textarea>
 </div>

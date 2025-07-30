@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { signal, computed } from '@angular/core';
+import { List } from './list';
 import { Listitem } from './listitem';
 import { ListitemComponent } from './listitem/listitem.component';
 
@@ -44,6 +45,16 @@ export class AppComponent {
     // },
   ];
 
+  allLists:Array<List> = [
+
+  ];
+
+  currentList: List = {
+    uuid: 0,
+    title: "Placeholder",
+    items: [],
+  };
+
   addItem(){
     this.allItems.push({
       uuid: Date.now(),
@@ -58,22 +69,60 @@ export class AppComponent {
     return this.allItems;
   }
 
+  get lists(){
+    return this.allLists;
+  }
+
   remove(item: Listitem){
     this.allItems.splice(this.allItems.indexOf(item), 1);
     this.saveItems();
   }
 
-  saveItems(){
-    console.log("save")
-    localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(this.allItems));
+
+  generateNewList(){
+    this.currentList = {
+      uuid: Date.now(),
+      title: "",
+      items: [],
+    };
+    this.allLists.push(this.currentList);
   }
+
+  setList(id: string){
+    let targetListID = parseInt(id);
+    let targetList: List = this.allLists.find((el)=>{return el.uuid === targetListID}) || {uuid: 0, title: "", items: []};
+    console.log(typeof targetList);
+    this.currentList = targetList;
+    console.log(this.currentList)
+    this.allItems = this.currentList.items;
+  }
+
+
+
+  saveItems(){
+    console.log("save");
+    console.log(this.allItems)
+    this.currentList.items = this.allItems;
+    localStorage.setItem(this.LOCAL_STORAGE_KEY, JSON.stringify(this.allLists));
+  }
+
+
+  unsetCurrentList(){
+    this.currentList = {
+    uuid: 0,
+    title: "Placeholder",
+    items: [],
+    };
+    this.allItems = [];
+  }
+
 
   ngOnInit(){
     console.log("setup")
     let itemsToLoad = localStorage.getItem(this.LOCAL_STORAGE_KEY);
     console.log(itemsToLoad);
     if (typeof itemsToLoad){
-      this.allItems = JSON.parse(itemsToLoad || "[]");
+      this.allLists = JSON.parse(itemsToLoad || "[]");
 
     }
   }
