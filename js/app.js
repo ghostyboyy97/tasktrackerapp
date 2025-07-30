@@ -1,7 +1,7 @@
 let activeList = 0;
 let allLists = [];
 const LIST_STORAGE_KEY = "__tasktrackerapp_lists__";
-const LIST_ACTIVE_STORAGE_KEY = "__tasktrackerapp_list_key__"
+const LIST_ACTIVE_STORAGE_KEY = "__tasktrackerapp_list_key__";
 let bodyRef;
 let animTimeout;
 

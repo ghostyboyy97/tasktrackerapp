@@ -1,12 +1,3 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
 <style>
   :host {
     --bright-blue: oklch(51.01% 0.274 263.83);
@@ -36,9 +27,7 @@
 
     --pill-accent: var(--bright-blue);
 
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
+    
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -51,9 +40,6 @@
     line-height: 100%;
     letter-spacing: -0.125rem;
     margin: 0;
-    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
   }
 
   p {
@@ -117,7 +103,6 @@
     border-radius: 2.75rem;
     border: 0;
     transition: background 0.3s ease;
-    font-family: var(--inter-font);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 500;
@@ -178,19 +163,22 @@
 </style>
 
 <main class="main">
-  <header>Task Tracker App</header>
-  <body>
-    <list-view></list-view>
-  </body>
+  <header><h1>{{ title }}</h1></header>
+  <!-- <ul>
+    <li>test</li>
+  </ul> -->
+  <ul>
+    @for(item of items; track item.title){
+      <li>{{item.title}}</li>
+    }
+  </ul>
+  <div class="list_item__ctr">
+    @for(item of items; track item.uuid){
+      <app-listitem (remove)="remove(item)" (saveItems)="saveItems()" [item]="item"></app-listitem>
+    }
+  </div>
+  <button (click)="addItem()">Add</button>
+
 </main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
 
 <router-outlet />

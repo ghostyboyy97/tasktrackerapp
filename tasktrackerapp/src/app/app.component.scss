@@ -1,6 +1,7 @@
 header{
     width: 100%;
-    // display: flex;
+    display: flex;
+    background: blue;
     justify-content: space-between;
     h1{
         color: white;
@@ -8,4 +9,8 @@ header{
     button{
         background: none;
     }
+}
+main{
+    display: flex;
+    flex-direction: column;
 }
