@@ -208,8 +208,10 @@ function loadLists(){
             showAllLists();
             makeAllLists();
         }
+    } else {
+        showAllLists();
+        makeAllLists();
     }
-    // else, no lists to make, just show default UI
 
 
 
