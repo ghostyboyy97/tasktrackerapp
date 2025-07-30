@@ -1,0 +1,52 @@
+@import "../../modules";
+@import "../../styles.scss";
+
+
+
+.list_ctr__item{
+    width: 100%;
+    margin: 10px 0;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-areas: 
+        "status title delete"
+        "empty desc desc";
+    grid-template-columns: 2em 1fr 0.4em;
+    gap: 0.1em 0.1em;
+    select{
+        grid-area: status;
+        border: 2px solid transparent;
+        &:has(> option[value="to_do"]:checked){
+            border-color: $lightAccent;
+            background-color: rgba($lightAccent, 0.5);
+        }
+        &:has(> option[value="in_progress"]:checked){
+            border-color: rgb(231, 173, 0);
+            background-color: rgba(231, 173, 0, 0.5);
+        }
+        &:has(> option[value="on_hold"]:checked){
+            border-color: #E0003C;
+            background-color: rgba(#E0003C, 0.5);
+        }
+        &:has(> option[value="completed"]:checked){
+            border-color: #7FBA00;
+            background-color: rgba(#7FBA00, 0.5);
+        }
+    }
+    input{
+        grid-area: title;
+        font-size: 0.33em;
+    }
+    button{
+        grid-area: delete;
+        @include flex(row, flex-end, center);
+        img{
+            @include square(0.4em);
+        }
+    }
+    textarea{
+        grid-area: desc;
+        font-size: 0.2em;
+        background-color: #EEF0F4;
+    }
+}

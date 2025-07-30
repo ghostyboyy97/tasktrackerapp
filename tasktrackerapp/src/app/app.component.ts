@@ -16,6 +16,7 @@ import { ListitemComponent } from './listitem/listitem.component';
 export class AppComponent {
   title = 'Task Tracker App';
   LOCAL_STORAGE_KEY = "__ng_tasktrackerapp_data__";
+  LOCAL_STORAGE_ACTIVE_KEY = "__ng_tasktrackerapp_active_list__";
 
   // for loop - track parameter is used to keep the dom association, can pass in any parameter and then access all parts of the child easily
   allItems:Array<Listitem> = [
@@ -95,6 +96,7 @@ export class AppComponent {
     this.currentList = targetList;
     console.log(this.currentList)
     this.allItems = this.currentList.items;
+    localStorage.setItem(this.LOCAL_STORAGE_ACTIVE_KEY, JSON.stringify(this.currentList.uuid));
   }
 
 
@@ -114,17 +116,30 @@ export class AppComponent {
     items: [],
     };
     this.allItems = [];
+    localStorage.setItem(this.LOCAL_STORAGE_ACTIVE_KEY, JSON.stringify(this.currentList.uuid));
   }
 
 
-  ngOnInit(){
+  ngOnInit(event: Event){
     console.log("setup")
     let itemsToLoad = localStorage.getItem(this.LOCAL_STORAGE_KEY);
     console.log(itemsToLoad);
     if (typeof itemsToLoad){
       this.allLists = JSON.parse(itemsToLoad || "[]");
-
+      let previousActiveList = localStorage.getItem(this.LOCAL_STORAGE_ACTIVE_KEY) || "0";
+      if (previousActiveList !== "0"){
+        this.setList(previousActiveList)
+      }
     }
+    this.onResize(event);
+  }
+
+  font = 100;
+  onResize(event: Event){
+    let ws = window.innerWidth/1920;
+    let hs = window.innerHeight/1080;
+    let ratio = ws < hs ? ws : hs;
+    this.font = 100 * ratio;
   }
 
 }

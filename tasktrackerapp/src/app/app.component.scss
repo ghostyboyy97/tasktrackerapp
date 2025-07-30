@@ -1,16 +1,156 @@
+@import "../modules";
+@import "../styles.scss";
+
 header{
-    width: 100%;
-    display: flex;
-    background: blue;
-    justify-content: space-between;
+    @include rect(100%, 2em);
+    flex-shrink: 0;
+    padding: 0 0.45em;
+    box-sizing: border-box;
+    @include flex(row, space-between, center);
+    background-color: $accent;
     h1{
+        font-size: 0.5em;
         color: white;
     }
     button{
-        background: none;
+        @include square(2em, 50%);
+        font-size: 0.5em;
+        border: 2px solid white;
+        color: white;
+        background-color: transparent;
+        transition: transform 0.33s ease, background-color 0.33s ease, color 0.33s ease, border-color 0.33s ease;
+        &:hover{
+            background-color: white;
+            color: $accent;
+            border-color: $accent;
+        }
     }
 }
 main{
     display: flex;
     flex-direction: column;
+    @include rect(100dvw, 100dvh);
+    box-sizing: border-box;
+    .all_lists__wrapper{
+        @include square();
+        padding: 0.5em;
+        box-sizing: border-box;
+        @include flex(column);
+    }
+    h2{
+        margin-top: 0;
+        font-size: 0.4em;
+        margin-bottom: 0.5em;
+        // transform: translateY(-0.4em);
+        // opacity: 0;
+        transition: transform 0.33s ease, opacity 0.33s ease;
+    }
+    .all_lists__ctr{
+        width: min(75dvw, 100%);
+        padding-right: 0.25em;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        .list_entry{
+            @include rect(100%, fit-content);
+            @include flex(row, space-between, center);
+            padding: 0.05em 0;
+            box-sizing: border-box;
+            cursor: pointer;
+            // transform: translateX(-0.5em);
+            // opacity: 0;
+            // pointer-events: none;
+            transition: transform 0.33s ease, opacity 0.33s ease;
+            &:hover{
+                .list_entry__title{
+                    font-weight: 500;
+                }
+                .list_entry__button img{
+                    transform: translateX(20%);
+                }
+            }
+            &:not(.add_list):nth-of-type(odd){
+                background: $lightGray;
+            }
+            .list_entry__icon{
+                @include square(0.4em);
+                margin-right: 0.1em;
+                display: flex;
+                img{
+                    @include square();
+                }
+            }
+            .list_entry__button{
+                @include flex(row, center, center);
+                margin-right: 0.25em;
+                img{
+                    margin-left: 0.15em;
+                    @include rect(2em, 1em);
+                    transition: transform 0.33s ease;
+                }
+            }
+            .list_entry__title, .list_entry__button{
+                font-size: 0.33em;
+                transition: font-weight 0.33s ease;
+            }
+            .list_entry__icon, .list_entry__button{
+                flex-shrink: 0;
+            }
+            .list_entry__title{
+                width: 100%;
+            }
+        }
+    }
+    .add_list{
+        @include rect(8em, 2em, 1em);
+        margin-top: 1em;
+        background-color: $lightAccent;
+        font-size: 0.33em;
+        color: white;
+        @include flex(row, center, center);
+        transition: background-color 0.33s ease;
+        &:hover{
+            background-color: $accent;
+        }
+    }
+
+
+    .list_ctr{
+        @include square();
+        padding: 0.5em;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        // transform: translateX(125%);
+        // opacity: 0;
+        transition: transform 0.33s ease, opacity 0.33s ease;
+        .nav_button{
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+        #listTitle{
+            margin: 0.5em 0 1em;
+            font-size: 0.5em;
+            flex-shrink: 0;
+        }
+        .list_ctr__items{
+            @include rect(100%, fit-content);
+            max-height: 100%;
+            padding-right: 0.3em;
+            box-sizing: border-box;
+            @include flex(column);
+            overflow-y: auto;
+            app-listitem{
+                width: 100%;
+            }
+        }
+    }
+    .add_item_to_list{
+        @include square(2em);
+        margin-top: 1em;
+        flex-shrink: 0;
+        img{
+            @include square(1em);
+        }
+    }
 }
