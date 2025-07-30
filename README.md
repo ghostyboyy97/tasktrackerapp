@@ -1,4 +1,4 @@
-# TasktrackerAngular
+# Task Tracker App
 
 This project was the initial jQuery-based prototype of the task tracking application, later [refactored into Angular](https://ghostyboyy97.github.io/tasktracker_angular/). It utilizes localStorage to dynamicaly save and load task lists.
 
