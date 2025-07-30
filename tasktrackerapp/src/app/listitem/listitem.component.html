@@ -18,6 +18,6 @@
         <option value="completed">Completed</option>
     </select>
     <input type="text" #editedTitle [id]="item.uuid" [value]="item.title" (change)="item.title = editedTitle.value"/>
-    <button>Delete</button>
+    <button (click)="remove.emit()">Delete</button>
     <textarea placeholder="Add a description" rows="3" #editedDesc (change)="item.desc = editedDesc.value">{{item.desc}}</textarea>
 </div>
